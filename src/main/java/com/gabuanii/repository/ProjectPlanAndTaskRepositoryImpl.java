@@ -7,9 +7,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ProjectPlanAndTaskRepositoryImpl implements ProjectPlanAndTaskRepository {
@@ -140,25 +138,31 @@ public class ProjectPlanAndTaskRepositoryImpl implements ProjectPlanAndTaskRepos
     }
 
     @Override
-    public boolean hasCircularDependencies(List<Task> tasks, int taskId, int taskDependencyId) {
+    public boolean hasCircularDependencies(int projectPlanId, Task task, Task taskDependency) {
         List<Integer> taskDependencyIds = new ArrayList<>();
-        tasks.stream().forEach(task -> {
-            if (task.getTaskDependencies().contains(taskId)) {
-                taskDependencyIds.addAll(getTaskIds(tasks, task.getId()));
-            }
-        });
-        return taskDependencyIds.contains(taskDependencyId);
+        findDependenciesIds(projectPlanId, taskDependency, taskDependencyIds);
+        if (taskDependencyIds.contains(task.getId())) {
+            System.out.println("Path: " +
+                    taskDependencyIds.stream()
+                            .map(x -> String.valueOf(x))
+                            .sorted()
+                            .collect(Collectors.joining(" -> ")) + " -> "
+                    + task.getId() + " ...");
+            return taskDependencyIds.contains(task.getId());
+        } else return false;
     }
 
-    private List<Integer> getTaskIds(List<Task> tasks, int taskId) {
-        return tasks.stream()
-                .filter(task -> task.getTaskDependencies().contains(taskId))
-                .map(task -> task.getId())
-                .collect(Collectors.toList());
+    private void findDependenciesIds(int projectPlanId, Task task, List<Integer> result) {
+        for (Integer taskId : task.getTaskDependencies()) {
+            Task taskDependency = findTaskById(projectPlanId, taskId);
+            result.add(taskId);
+            findDependenciesIds(projectPlanId, taskDependency, result);
+        }
+
     }
 
     @Override
-    public boolean taskHasDependency(int projectPlanId, int taskId){
+    public boolean taskHasDependency(int projectPlanId, int taskId) {
         ProjectPlan projectPlan = findProjectPlanById(projectPlanId);
         return projectPlan.getTaskList().stream()
                 .anyMatch(task -> task.getTaskDependencies().contains(taskId));

@@ -2,3 +2,7 @@
 /src/test/
 /target/
 /pom.xml
+/bin/
+/out/
+/.project
+/.classpath

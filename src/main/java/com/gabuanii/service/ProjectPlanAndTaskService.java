@@ -23,7 +23,7 @@ public interface ProjectPlanAndTaskService {
 
     void generateTaskDuration(int projectPlanId);
 
-    boolean checkHasCircularDependencies(List<Task> tasks, int taskId, int taskDependencyId);
+    boolean checkHasCircularDependencies(int projectPlanId, Task task, Task taskDependency);
 
     boolean checkTaskHasDependency(int projectPlanId, int taskId);
 

@@ -28,7 +28,7 @@ public interface ProjectPlanAndTaskRepository {
 
     void refreshTaskDuration(int projectPlanId);
 
-    boolean hasCircularDependencies(List<Task> tasks, int taskId, int taskDependecyId);
+    boolean hasCircularDependencies(int projectPlanId, Task task, Task taskDependency);
 
     boolean taskHasDependency(int projectPlanId, int taskId);
 

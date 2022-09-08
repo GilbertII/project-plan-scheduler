@@ -46,8 +46,8 @@ public class ProjectPlanAndTaskServiceImpl implements ProjectPlanAndTaskService{
     }
 
     @Override
-    public boolean checkHasCircularDependencies(List<Task> tasks, int taskId, int taskDependencyId){
-        return projectPlanAndTaskRepository.hasCircularDependencies(tasks,taskId, taskDependencyId);
+    public boolean checkHasCircularDependencies(int projectPlanId, Task task, Task taskDependency){
+        return projectPlanAndTaskRepository.hasCircularDependencies(projectPlanId,task, taskDependency);
     }
 
     @Override

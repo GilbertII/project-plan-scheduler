@@ -215,10 +215,10 @@ public class TaskController {
                     System.out.println("Successfully cleared dependencies!");
                     hasDependency = false;
                 } else if (projectPlanAndTaskService
-                        .checkHasCircularDependencies(projectPlan.getTaskList(), task.getId(), taskDependency.getId())) {
-                    System.out.println("Cannot add Task Dependency " + taskDependency.getTaskName()
-                            + " to Task " + task.getTaskName()
-                            + " Circular Dependency may occur!");
+                        .checkHasCircularDependencies(projectPlan.getId(), task, taskDependency)) {
+                    System.out.println("Cannot Add Task " + task.getTaskName()
+                            + " With Dependency " + taskDependency.getTaskName()
+                            + " Circular Dependency May Occur!");
                 } else {
                     task.getTaskDependencies().add(taskDependency.getId());
                     projectPlanAndTaskService.generateTaskDuration(projectPlan.getId());
