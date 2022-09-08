@@ -142,13 +142,12 @@ public class ProjectPlanAndTaskRepositoryImpl implements ProjectPlanAndTaskRepos
         List<Integer> taskDependencyIds = new ArrayList<>();
         findDependenciesIds(projectPlanId, taskDependency, taskDependencyIds);
         if (taskDependencyIds.contains(task.getId())) {
+            taskDependencyIds.add(taskDependency.getId());
             System.out.println("Path: " +
                     taskDependencyIds.stream()
                             .map(x -> String.valueOf(x))
-                            .sorted()
-                            .collect(Collectors.joining(" -> ")) + " -> "
-                    + task.getId() + " ...");
-            return taskDependencyIds.contains(task.getId());
+                            .collect(Collectors.joining(" -> ")) + " ...");
+            return true;
         } else return false;
     }
 
